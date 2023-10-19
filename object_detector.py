@@ -1,14 +1,13 @@
 from ultralytics import YOLO
 
-
-
 import cv2
 
 import time
 
 def fun():
     model = YOLO('yolov8n.pt')
-    crop_percentage = 0.45
+    
+    crop_percentage = 1# 0.45
 
     # video_path = "videos/bright_3.mp4"
     cap = cv2.VideoCapture(0)
@@ -21,14 +20,8 @@ def fun():
 
     while cap.isOpened():
         success, frame = cap.read()
-
         if success:
-            image = frame[height:, :]
-
-            blurred_image = cv2.blur(image, (5, 5))
-
-            rgb_image = cv2.cvtColor(blurred_image, cv2.COLOR_BGR2RGB)
-            results = model.predict(rgb_image)
+            results = model.predict(frame, device='cpu')
 
             annotated_frame = results[0].plot()
 
